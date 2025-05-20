@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Rs Live TV - Live Sports Player</title>
-  <script src="https://cdn.jsdelivr.net/npm/clappr@latest/dist/clappr.min.js"></script>
+  <link href="https://vjs.zencdn.net/8.5.2/video-js.css" rel="stylesheet" />
+  <script src="https://vjs.zencdn.net/8.5.2/video.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
   <style>
     body {
@@ -25,7 +26,7 @@
       background: #000;
     }
 
-    #player {
+    .video-js {
       width: 100%;
       height: 100%;
     }
@@ -43,16 +44,11 @@
       height: 40px;
       animation: spin 1s linear infinite;
       z-index: 9999;
-      display: none;
     }
 
     @keyframes spin {
-      0% {
-        transform: translate(-50%, -50%) rotate(0deg);
-      }
-      100% {
-        transform: translate(-50%, -50%) rotate(360deg);
-      }
+      0% { transform: translate(-50%, -50%) rotate(0deg); }
+      100% { transform: translate(-50%, -50%) rotate(360deg); }
     }
 
     .headline {
@@ -71,12 +67,8 @@
     }
 
     @keyframes marquee {
-      0% {
-        transform: translateX(0%);
-      }
-      100% {
-        transform: translateX(-100%);
-      }
+      0% { transform: translateX(0%); }
+      100% { transform: translateX(-100%); }
     }
 
     .channel-info {
@@ -111,68 +103,79 @@
         height: 48px;
       }
     }
+
+    /* Watermark */
+    .vjs-watermark {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      z-index: 999;
+    }
+
+    .vjs-watermark img {
+      width: 80px;
+      opacity: 0.8;
+    }
   </style>
 </head>
 <body>
-  <!-- Video Player with Loader -->
+  <!-- ভিডিও প্লেয়ার -->
   <div id="player-container">
     <div id="loading-spinner"></div>
-    <div id="player"></div>
+    <video
+      id="live-video"
+      class="video-js vjs-default-skin"
+      controls
+      autoplay
+      muted
+      playsinline
+      preload="auto"
+    ></video>
+    <!-- Watermark -->
+    <div class="vjs-watermark">
+      <img src="https://i.postimg.cc/CxwVHY40/20250415-163330.png" alt="Watermark" />
+    </div>
   </div>
 
-  <!-- Headline Ticker -->
+  <!-- হেডলাইন -->
   <div class="headline">
     <span>
       এখন চলছে আইপিএল ২০২৫ - চেন্নাই সুপার কিংস 🟡 বনাম রাজস্থান রয়েলস 🟣 লাইভ ম্যাচ! চেন্নাই ব্যাট করছে | নিয়মিত আপডেট পেতে টেলিগ্রামে যোগ দিন ▶ @rslivetv
     </span>
   </div>
 
-  <!-- Channel Info -->
+  <!-- চ্যানেল তথ্য -->
   <div class="channel-info">
     <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQBTOy4ioF4ydTrXWJ9nXzuJrIH-SrC72JC4AATegTppLNEy4OYxzYFQyzT&s=10" alt="Rs Live TV Logo" />
     <h2>CSK vs RR, IPL LIVE 2025</h2>
   </div>
 
   <script>
-    const spinner = document.getElementById("loading-spinner");
-
-    const player = new Clappr.Player({
-      source: "https://live.tsports.com/mobile_hls/tsports_live_2/playlist.m3u8", // লাইভ ভিডিও URL
-      parentId: "#player",
-      autoPlay: true,
-      width: "100%",
-      height: "100%",
-      watermark: "https://i.postimg.cc/CxwVHY40/20250415-163330.png", // ওয়াটারমার্ক URL
-      position: "top-left",  // ওয়াটারমার্ক বাম উপরের কোণে
-      mediacontrol: {
-        seekbarColor: "#000000",
-        buttons: "#00ff00"
-      },
+    const player = videojs('live-video', {
+      sources: [{
+        src: 'https://live.tsports.com/mobile_hls/tsports_live_2/playlist.m3u8',
+        type: 'application/x-mpegURL'
+      }],
     });
 
-    player.on(Clappr.Events.PLAYER_BUFFERING, () => {
+    const spinner = document.getElementById("loading-spinner");
+
+    player.on('waiting', () => {
       spinner.style.display = "block";
     });
 
-    player.on(Clappr.Events.PLAYER_PLAY, () => {
+    player.on('playing', () => {
       spinner.style.display = "none";
     });
 
-    player.on(Clappr.Events.PLAYER_READY, () => {
+    player.on('error', () => {
       spinner.style.display = "none";
-    });
-
-    player.on(Clappr.Events.PLAYER_STOP, () => {
-      spinner.style.display = "none";
-    });
-
-    player.on(Clappr.Events.PLAYER_ERROR, () => {
-      spinner.style.display = "none";
-      alert("ভিডিও লোড করতে সমস্যা হয়েছে। পরে আবার চেষ্টা করুন।");
+      alert("ভিডিও চালু করতে সমস্যা হচ্ছে। অনুগ্রহ করে পরে আবার চেষ্টা করুন।");
     });
   </script>
-  
-  <script async="async" data-cfasync="false" src="//pl26377079.profitableratecpm.com/cdeccdd75d3e2e6916a42ce9653cfb08/invoke.js"></script>
-<div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div>
+
+  <!-- অ্যাড কোড -->
+  <script async data-cfasync="false" src="//pl26377079.profitableratecpm.com/cdeccdd75d3e2e6916a42ce9653cfb08/invoke.js"></script>
+  <div id="container-cdeccdd75d3e2e6916a42ce9653cfb08"></div>
 </body>
 </html>
